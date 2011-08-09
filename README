@@ -1,0 +1,17 @@
+A simple interactive shell to invoke rake tasks.
+
+Installation: put the 'irk'-script somewhere in your PATH, e.g. /usr/local/bin
+Usage: where you could invoke rake, invoke irk instead, with a fragment of the name of the task you want to invoke, e.g.
+
+% irk dump
+   0) db:data:dump_dir
+   1) db:dump
+   2) db:mysql:dump
+   3) db:schema:dump
+   4) db:structure:dump
+> 2
+
+On the following prompt you can invoke a task just with its number. It is also possible to pass additional parameters:
+> 1 FILE=foo OTHER=bar
+
+ 
