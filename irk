@@ -1,0 +1,70 @@
+#!/usr/bin/env ruby
+
+require "readline"
+include Readline
+
+def get_lines(pattern = '')
+  @lines = `rake -T #{pattern}`.split("\n")
+  @lines.shift
+  @lines = @lines.each do |l|
+    l.gsub!(/^rake /, '')
+    l.gsub!(/\s*#.*/, '')
+    l.strip
+  end
+end
+
+def execute(i, args = '')
+  cmd = "rake #{@lines[i]} #{ARGV.join(' ')} #{args}"
+  puts cmd
+  exec cmd
+end  
+
+def list
+  @lines.each_with_index do |l,i|
+    puts " #{i.to_s.rjust(3)}) #{l}"
+  end
+end
+
+get_lines(ARGV[0])
+ARGV.shift
+
+case @lines.size
+when 0
+  puts "no tasks found. sorry"
+  exit
+when 1
+  execute(0)
+end
+
+
+list
+
+loop do
+  a = readline('> ').strip
+  HISTORY.push(a)
+
+  case a
+  when /^(\d+)\s*(.*)?$/
+    execute($1.to_i, $2)
+  when /^e\s*(\d+)$/
+    system "rake -D #{@lines[$1.to_i]}"
+  when /^t\s*(.*)$/
+    get_lines($1)
+    list
+  when /^l$/
+    list
+  when /^q$/
+    break
+  when /^\?$/
+    puts "e NN  : execute task"
+    puts "NN    :   execute task"
+    puts "t PPPP: set new search pattern"
+    puts "l     : list found tasks (again)"
+    puts "q     : quit"
+    break
+  else  
+    puts "Huh? (q to quit, ? for help)"
+  end  
+end
+
+puts "bye"
