@@ -1,3 +1,4 @@
+TEST
 A simple interactive shell to invoke rake tasks.
 
 Installation: put the 'irk'-script somewhere in your PATH, e.g. /usr/local/bin
